@@ -51,8 +51,9 @@ export default function MyApp() {
   function Equals() {
     try {
       // eslint-disable-next-line
-      const rawResult = eval(count.replace(/x/g, '*'));
-      const result = parseFloat(rawResult.toFixed(9));
+      const expression = count.replace(/x/g, '*');
+      const rawResult = eval(expression);
+      const result = parseFloat(rawResult.toFixed(9)).toString();
       setCount(result.toString());
       return result;
     } catch (error) {
