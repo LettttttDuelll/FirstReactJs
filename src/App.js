@@ -4,7 +4,9 @@ export default function MyApp() {
 
   const [count, setCount] = useState("");
 
-  let audiom ;
+  const [history, setHistory] = useState([]);
+
+  let audiom;
 
   function ClickOnce(MyButton) {
     return (
@@ -24,24 +26,12 @@ export default function MyApp() {
     );
   }
 
-  function PlayHope() {
+  function PlayMusic({ MusicName }) {
     if (audiom) {
-    audiom.pause();
-    audiom.currentTime = 0;
-  }
-    audiom = new Audio(`${process.env.PUBLIC_URL}/Hope.mp3`);
-    audiom.volume = 0.5; // Set volume to 50%
-    audiom.loop = true; // Loop the audio
-    audiom.playbackRate = 1.0; // Set playback speed to normal
-    audiom.play();
-  }
-
-  function PlayWorld() {
-    if (audiom) {
-    audiom.pause();
-    audiom.currentTime = 0;
-  }
-    audiom = new Audio(`${process.env.PUBLIC_URL}/World.mp3`);
+      audiom.pause();
+      audiom.currentTime = 0;
+    }
+    audiom = new Audio(`${process.env.PUBLIC_URL}/${MusicName}.mp3`);
     audiom.volume = 0.5; // Set volume to 50%
     audiom.loop = true; // Loop the audio
     audiom.playbackRate = 1.0; // Set playback speed to normal
@@ -55,6 +45,7 @@ export default function MyApp() {
       const rawResult = eval(expression);
       const result = parseFloat(rawResult.toFixed(9)).toString();
       setCount(result.toString());
+      setHistory([history, `${count} = ${result}`]);
       return result;
     } catch (error) {
       console.error("Invalid expression", error);
@@ -62,6 +53,10 @@ export default function MyApp() {
     }
 
   }
+  const FirstLine = ["1", "2", "3", "+"];
+  const SecondLine = ["4", "5", "6", "/"];
+  const ThirdLine = ["7", "8", "9", "x"];
+  const FourthLine = [".", "0", "=", "/"];
   return (
     <>
       <div>
@@ -71,34 +66,38 @@ export default function MyApp() {
         </div>
       </div>
       <div>
-        <button className="MyButton" onClick={PlayHope} >Hope</button>
-        <button className="MyButton" onClick={PlayWorld}>World</button>
+        <button className="MyButton" onClick={() => PlayMusic({ MusicName: "Hope" })}>Hope</button>
+        <button className="MyButton" onClick={() => PlayMusic({ MusicName: "World" })}>World</button>
         <MyButton onClick={DeleteLast} name={'AC'} />
         <MyButton onClick={DeleteAll} name={'DEL'} />
       </div>
       <div>
-        <MyButton onClick={ClickOnce} name={'1'} />
-        <MyButton onClick={ClickOnce} name={'2'} />
-        <MyButton onClick={ClickOnce} name={'3'} />
-        <MyButton onClick={ClickOnce} name={'+'} />
+        {FirstLine.map((value, index) => (
+          <MyButton key={index} onClick={ClickOnce} name={value} />
+        ))}
       </div>
       <div>
-        <MyButton onClick={ClickOnce} name={'4'} />
-        <MyButton onClick={ClickOnce} name={'5'} />
-        <MyButton onClick={ClickOnce} name={'6'} />
-        <MyButton onClick={ClickOnce} name={'/'} />
+        {SecondLine.map((value,index)=>(
+          <MyButton key={index} onClick={ClickOnce} name={value} />
+        ))}
       </div>
       <div>
-        <MyButton onClick={ClickOnce} name={'7'} />
-        <MyButton onClick={ClickOnce} name={'8'} />
-        <MyButton onClick={ClickOnce} name={'9'} />
-        <MyButton onClick={ClickOnce} name={'x'} />
+        {ThirdLine.map((value,index)=> (
+          <MyButton key = {index} onClick={ClickOnce} name={value} />
+        ))}
       </div>
       <div>
-        <MyButton onClick={ClickOnce} name={'.'} />
-        <MyButton onClick={ClickOnce} name={'0'} />
-        <MyButton onClick={Equals} name={'='} />
-        <MyButton onClick={ClickOnce} name={'/'} />
+        {FourthLine.map((value,index)=> (
+          <MyButton key = {index} onClick={value === "=" ? Equals : ClickOnce} name={value} />
+        ))}
+      </div>
+      <div>
+        <h2>History</h2>
+        <div className="history">
+          {history.map((item, index) => (
+            <div key={index} className="history">{item}</div>
+          ))}
+        </div>
       </div>
     </>
   );

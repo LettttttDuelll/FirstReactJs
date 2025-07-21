@@ -39,3 +39,11 @@
 .title{
   color: aqua;
 }
+.count{
+  color: yellow;
+  size: 20px;
+}
+.ShowResult{
+  width: 100%;
+  max-width: 600px;
+}
